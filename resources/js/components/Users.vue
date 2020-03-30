@@ -119,7 +119,7 @@
             password : '',
             type : '',
             bio : '',
-            phone : ''
+            photo : ''
           })
         }
       },
