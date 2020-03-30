@@ -101,6 +101,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
 
           <li class="nav-item">
+          <router-link to="/developer" tag="a" class="nav-link"  active-class="active" exact>
+            <i class="nav-icon fas fa-cogs text-orange"></i>
+            <p>
+              Developer
+            </p>
+          </router-link>
+          </li>
+          <li class="nav-item">
           <router-link to="/profile" tag="a" class="nav-link"  active-class="active" exact>
             <i class="nav-icon fas fa-user text-orange"></i>
             <p>

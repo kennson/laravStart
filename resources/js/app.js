@@ -57,6 +57,7 @@ Vue.use(VueProgressBar, options)
 let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
+    { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default }
   ]
 
@@ -65,7 +66,20 @@ let routes = [
     routes // short for `routes: routes`
   })
 
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
 
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
 
 /**
  * The following block of code may be used to automatically register your
