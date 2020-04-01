@@ -62,6 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="info">
           <a href="#" class="d-block">
             {{ Auth::user()->name }}
+            <p>{{ Auth::user()->type }}</p>
           </a>
         </div>
       </div>
@@ -80,7 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </p>
           </router-link>
           </li>
-             
+          @can('isAdmin')   
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog text-green"></i>
@@ -96,10 +97,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Users</p>
                 </router-link>
               </li>
-            
+           
             </ul>
           </li>
-
+          
           <li class="nav-item">
           <router-link to="/developer" tag="a" class="nav-link"  active-class="active" exact>
             <i class="nav-icon fas fa-cogs text-orange"></i>
@@ -116,6 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </p>
           </router-link>
           </li>
+          @endcan
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
@@ -164,6 +166,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </footer>
 </div>
 <!-- ./wrapper -->
+
+@auth
+<script>window.user = @json(auth()->user())</script>
+@endauth
 
 <script src="/js/app.js"></script>
 </body>

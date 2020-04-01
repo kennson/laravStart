@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::latest()->paginate(10);
+        return User::latest()->paginate(20);
     }
 
     /**
@@ -130,6 +130,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin');
         $user = User::findOrFail($id);
 
         $user->delete();
