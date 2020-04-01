@@ -31,6 +31,8 @@ window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
 
