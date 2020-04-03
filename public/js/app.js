@@ -2374,6 +2374,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2396,16 +2409,18 @@ __webpack_require__.r(__webpack_exports__);
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('api/user?page=' + page).then(function (response) {
-        _this.laravelData = response.data;
+        _this.users = response.data;
       });
     },
     updateUser: function updateUser() {
       var _this2 = this;
 
-      this.$Progress.start();
+      this.$Progress.start(); // console.log('Editing data');
+
       this.form.put('api/user/' + this.form.id).then(function () {
+        // success
         $('#addNew').modal('hide');
-        Swal.fire('Updated!', 'Information has been updated.', 'success');
+        swal('Updated!', 'Information has been updated.', 'success');
 
         _this2.$Progress.finish();
 
@@ -2421,16 +2436,17 @@ __webpack_require__.r(__webpack_exports__);
       this.form.fill(user);
     },
     newModal: function newModal() {
-      this.editmode = false, this.form.reset();
+      this.editmode = false;
+      this.form.reset();
       $('#addNew').modal('show');
     },
     deleteUser: function deleteUser(id) {
       var _this3 = this;
 
-      Swal.fire({
+      swal({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -2439,10 +2455,10 @@ __webpack_require__.r(__webpack_exports__);
         // Send request to the server
         if (result.value) {
           _this3.form["delete"]('api/user/' + id).then(function () {
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+            swal('Deleted!', 'Your file has been deleted.', 'success');
             Fire.$emit('AfterCreate');
           })["catch"](function () {
-            Swal.fire('Failed', 'There was something wrong.', 'warding');
+            swal("Failed!", "There was something wronge.", "warning");
           });
         }
       });
@@ -2464,9 +2480,9 @@ __webpack_require__.r(__webpack_exports__);
       this.form.post('api/user').then(function () {
         Fire.$emit('AfterCreate');
         $('#addNew').modal('hide');
-        toast.fire({
-          icon: 'success',
-          title: 'User created successfully'
+        toast({
+          type: 'success',
+          title: 'User Created in successfully'
         });
 
         _this5.$Progress.finish();
@@ -2476,10 +2492,17 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this6 = this;
 
+    Fire.$on('searching', function () {
+      var query = _this6.$parent.search;
+      axios.get('api/findUser?q=' + query).then(function (data) {
+        _this6.users = data.data;
+        console.log('searching...');
+      })["catch"](function () {});
+    });
     this.loadUsers();
     Fire.$on('AfterCreate', function () {
       _this6.loadUsers();
-    }); // setInterval(() => this.loadUsers(), 3000);
+    }); //    setInterval(() => this.loadUsers(), 3000);
   }
 });
 
@@ -62199,7 +62222,24 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-12 mt-3" }, [
         _c("div", { staticClass: "box box-widget widget-user" }, [
-          _vm._m(0),
+          _c(
+            "div",
+            {
+              staticClass: "widget-user-header bg-black",
+              staticStyle: {
+                "background-image": "url('./img/user-cover.jpeg')"
+              }
+            },
+            [
+              _c("h3", { staticClass: "widget-user-username" }, [
+                _vm._v(_vm._s(this.form.name))
+              ]),
+              _vm._v(" "),
+              _c("h5", { staticClass: "widget-user-desc" }, [
+                _vm._v(_vm._s(this.form.type))
+              ])
+            ]
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "widget-user-image" }, [
             _c("img", {
@@ -62208,17 +62248,17 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _vm._m(1)
+          _vm._m(0)
         ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(2),
+          _vm._m(1),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "tab-content" }, [
-              _vm._m(3),
+              _vm._m(2),
               _vm._v(" "),
               _c(
                 "div",
@@ -62476,25 +62516,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "widget-user-header bg-black",
-        staticStyle: { "background-image": "url('./img/user-cover.jpeg')" }
-      },
-      [
-        _c("h3", { staticClass: "widget-user-username" }, [
-          _vm._v("Elizabeth Pierce")
-        ]),
-        _vm._v(" "),
-        _c("h5", { staticClass: "widget-user-desc" }, [_vm._v("Web Designer")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "box-footer" }, [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-sm-4 border-right" }, [
@@ -62614,13 +62635,10 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "box-body table-responsive no-padding" },
-                [
+              _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                _c("table", { staticClass: "table table-hover" }, [
                   _c(
-                    "table",
-                    { staticClass: "table table-hover" },
+                    "tbody",
                     [
                       _vm._m(0),
                       _vm._v(" "),
@@ -62651,13 +62669,11 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("i", {
-                                  staticClass: " fa fa-edit text-blue"
-                                })
-                              ]
+                              [_c("i", { staticClass: "fa fa-edit blue" })]
                             ),
-                            _vm._v(" "),
+                            _vm._v(
+                              "\n                    /\n                    "
+                            ),
                             _c(
                               "a",
                               {
@@ -62668,11 +62684,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("i", {
-                                  staticClass: " fa fa-trash text-red"
-                                })
-                              ]
+                              [_c("i", { staticClass: "fa fa-trash red" })]
                             )
                           ])
                         ])
@@ -62680,8 +62692,8 @@ var render = function() {
                     ],
                     2
                   )
-                ]
-              ),
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -62790,7 +62802,6 @@ var render = function() {
                           attrs: {
                             type: "text",
                             name: "name",
-                            id: "name",
                             placeholder: "Name"
                           },
                           domProps: { value: _vm.form.name },
@@ -62828,8 +62839,7 @@ var render = function() {
                           class: { "is-invalid": _vm.form.errors.has("email") },
                           attrs: {
                             type: "email",
-                            name: "name",
-                            id: "email",
+                            name: "email",
                             placeholder: "Email Address"
                           },
                           domProps: { value: _vm.form.email },
@@ -62868,7 +62878,7 @@ var render = function() {
                           attrs: {
                             name: "bio",
                             id: "bio",
-                            placeholder: "Short User Bio (optional)"
+                            placeholder: "Short bio for user (Optional)"
                           },
                           domProps: { value: _vm.form.bio },
                           on: {
@@ -62938,7 +62948,7 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("option", { attrs: { value: "user" } }, [
-                              _vm._v("User")
+                              _vm._v("Standard User")
                             ]),
                             _vm._v(" "),
                             _c("option", { attrs: { value: "author" } }, [
@@ -62948,7 +62958,7 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("has-error", {
-                          attrs: { form: _vm.form, field: "bio" }
+                          attrs: { form: _vm.form, field: "type" }
                         })
                       ],
                       1
@@ -62974,7 +62984,6 @@ var render = function() {
                           attrs: {
                             type: "password",
                             name: "password",
-                            placeholder: "Password",
                             id: "password"
                           },
                           domProps: { value: _vm.form.password },
@@ -79457,6 +79466,9 @@ var routes = [{
 }, {
   path: '/profile',
   component: __webpack_require__(/*! ./components/Profile.vue */ "./resources/js/components/Profile.vue")["default"]
+}, {
+  path: '*',
+  component: __webpack_require__(/*! ./components/NotFound.vue */ "./resources/js/components/NotFound.vue")["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
   mode: 'history',
@@ -79486,7 +79498,18 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 
 var app = new Vue({
   el: '#app',
-  router: router
+  router: router,
+  data: {
+    search: ''
+  },
+  methods: {
+    searchit: _.debounce(function () {
+      Fire.$emit('searching');
+    }, 1000),
+    printme: function printme() {
+      window.print();
+    }
+  }
 });
 Vue.filter('upText', function (text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
